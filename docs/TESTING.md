@@ -1,20 +1,6 @@
 # Testing
 
-## Running
+## Existing Tests
 
-```sh
-uv run pytest --cov=property_strategies   # tests with coverage report
-uv run python scripts/check.py      # every gate, as CI and the factory run it
-```
-
-## Policy
-
-- Branch coverage of `src/property_strategies` must stay at or above 80 %; the gate fails below it.
-- Tests exercise the public API (`import property_strategies`) and assert every observable effect:
-  return values, raised exceptions and their messages.
-- Each bug fix starts with a failing test that reproduces it.
-- Tests are deterministic: no network, no wall clock, no dependence on test order.
-
-## Layout
-
-`tests/test_<module>.py` mirrors each public module. Shared fixtures go in `tests/conftest.py`.
+- `tests/test_property_strategies.py`: Verifies package versioning and ensures the library version is exposed correctly.
+- `tests/test_strategies.py`: Covers the full behavioral testing of the six strategies. It includes tests for validation error handling (e.g., ensuring `PropertyStrategiesError` is raised for invalid inputs) and property checks to ensure outputs adhere to specific regex patterns and standard library parsing (e.g., `datetime.fromisoformat` or `urlsplit`).

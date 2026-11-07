@@ -1,21 +1,26 @@
-"""Hypothesis strategies for common data that always satisfy their format: emails, http URLs, semver, JSON values, RFC 3339 datetimes and slugs"""
+"""Hypothesis strategies for common structured data formats."""
 
 from __future__ import annotations
 
-__all__ = ["__version__", "normalize"]
+from property_strategies.errors import PropertyStrategiesError
+from property_strategies.strategies import (
+    emails,
+    http_urls,
+    json_values,
+    rfc3339_datetimes,
+    semvers,
+    slugs,
+)
 
 __version__ = "0.1.0"
 
-
-def normalize(value: str) -> str:
-    """Return ``value`` trimmed and lower-cased.
-
-    Placeholder API created by the template: replace it with the utility's real behavior.
-
-    Raises:
-        ValueError: if ``value`` is empty or only whitespace.
-    """
-    cleaned = value.strip()
-    if not cleaned:
-        raise ValueError("value must not be empty")
-    return cleaned.lower()
+__all__ = [
+    "PropertyStrategiesError",
+    "__version__",
+    "emails",
+    "http_urls",
+    "json_values",
+    "rfc3339_datetimes",
+    "semvers",
+    "slugs",
+]

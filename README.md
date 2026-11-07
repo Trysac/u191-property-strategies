@@ -1,48 +1,42 @@
 # property-strategies
 
-[![PyPI version](https://img.shields.io/pypi/v/trysac-property-strategies)](https://pypi.org/project/trysac-property-strategies/)
-[![License: MIT](https://img.shields.io/pypi/l/trysac-property-strategies)](LICENSE)
-[![CI](https://github.com/Trysac/u191-property-strategies/actions/workflows/ci.yml/badge.svg)](https://github.com/Trysac/u191-property-strategies/actions/workflows/ci.yml)
+Property-based tests frequently require complex inputs like URLs, emails, or version strings. Standard generators often produce inputs that fail validation logic, or they require filtering that causes tests to stall. This library provides deterministic Hypothesis strategies that generate valid data by construction.
 
-Hypothesis strategies for common data that always satisfy their format: emails, http URLs, semver, JSON values, RFC 3339 datetimes and slugs
+## Installation
 
-## Problem
-
-Describe in two or three sentences the concrete problem this utility solves, who hits it, and what
-they do today without it. Replace this paragraph when the first real feature lands.
-
-## Install
-
-```sh
-pip install trysac-property-strategies
-# or
-uv add trysac-property-strategies
+```bash
+pip install property-strategies
 ```
 
-Requires Python 3.10 or newer. No runtime dependencies.
-
-## Usage
+## Usage Example
 
 ```python
-import property_strategies
+from hypothesis import given
+from property_strategies import emails, http_urls, semvers
 
-# normalize() trims surrounding whitespace and lower-cases the text.
-print(property_strategies.normalize("  Hello World "))  # -> "hello world"
 
-# Blank input is rejected explicitly instead of returning an empty string.
-try:
-    property_strategies.normalize("   ")
-except ValueError as exc:
-    print(f"rejected: {exc}")
+@given(email=emails(), url=http_urls(), version=semvers())
+def test_my_service(email: str, url: str, version: str) -> None:
+    assert "@" in email
+    assert url.startswith(("http://", "https://"))
+    assert len(version.split(".")) == 3
 ```
 
-## Documentation
+## Public API
 
-- [Architecture](docs/ARCHITECTURE.md) and [decisions](docs/decisions/)
-- [Testing](docs/TESTING.md) and [security](docs/SECURITY.md)
-- [Project record](docs/PROJECT.md) and [stack](docs/STACK.md)
-- [Changelog](CHANGELOG.md) and [contributing guide](CONTRIBUTING.md)
+Exports:
+- `emails(*, max_length: int = 254, allow_plus: bool = True) -> SearchStrategy[str]`
+- `http_urls(*, schemes: Sequence[str] = ("http", "https"), max_length: int = 2048) -> SearchStrategy[str]`
+- `semvers(*, prerelease: bool = True, build: bool = True) -> SearchStrategy[str]`
+- `json_values(*, max_depth: int = 4, max_leaves: int = 50, allow_floats: bool = True) -> SearchStrategy[object]`
+- `rfc3339_datetimes(*, min_year: int = 1970, max_year: int = 2100, offsets: bool = True) -> SearchStrategy[str]`
+- `slugs(*, min_size: int = 1, max_size: int = 40) -> SearchStrategy[str]`
+- `PropertyStrategiesError`: Raised for invalid configuration (code: "invalid_argument").
 
-## License
+## Why not existing generators?
 
-[MIT](LICENSE) (c) 2026 Miguel Gomez
+Standard libraries like `hypothesis.strategies.emails` often generate email formats that common validation regexes reject, or they lack constraints like maximum lengths. This library strictly enforces RFC-compliant constraints by construction, preventing stall conditions during testing.
+
+## Security
+
+See [docs/SECURITY.md](docs/SECURITY.md).

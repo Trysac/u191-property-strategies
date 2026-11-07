@@ -9,4 +9,5 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
+- Add property_strategies providing six standard Hypothesis strategies for emails, http URLs, semvers, json values, RFC 3339 datetimes, and slugs.
 - Initial project structure from the factory utility template.
