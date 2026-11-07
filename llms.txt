@@ -1,0 +1,16 @@
+# property-strategies
+
+> Hypothesis strategies for common data that always satisfy their format: emails, http URLs, semver, JSON values, RFC 3339 datetimes and slugs Python package `trysac-property-strategies`, import name `property_strategies`, MIT licensed,
+> Python >= 3.10, no runtime dependencies.
+
+## Docs
+
+- [README](README.md): problem, install, usage example
+- [AGENTS](AGENTS.md): commands, folder map, conventions, limits
+- [Architecture](docs/ARCHITECTURE.md): shape of the package and its public API
+- [Testing](docs/TESTING.md): how to run and extend the tests
+
+## Optional
+
+- [Stack](docs/STACK.md): tools used and discarded
+- [Changelog](CHANGELOG.md): release history
