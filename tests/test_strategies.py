@@ -211,7 +211,11 @@ def test_json_values_with_floats(v: object) -> None:
 @given(dt=rfc3339_datetimes())
 def test_rfc3339_acceptance(dt: str) -> None:
     assert RFC3339_REGEX.match(dt) is not None
-    parsed = datetime.fromisoformat(dt.replace("Z", "+00:00"))
+    # Python 3.10 fromisoformat needs exactly 6 fractional digits; RFC 3339 allows any number.
+    iso = re.sub(
+        r"\.(\d+)", lambda m: "." + m.group(1)[:6].ljust(6, "0"), dt.replace("Z", "+00:00")
+    )
+    parsed = datetime.fromisoformat(iso)
     assert 1970 <= parsed.year <= 2100
 
 
