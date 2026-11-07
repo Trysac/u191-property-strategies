@@ -1,19 +1,12 @@
-# Security notes
+# Security Notes
 
-## Threat model
+## Threat Model
 
-`trysac-property-strategies` is a pure library without I/O. The main risks are:
+This package is a pure Python library with no I/O operations. It does not perform network requests or file system access.
 
-- **Supply chain**: a compromised dependency or CI action. Mitigation: no runtime dependencies,
-  Dependabot weekly updates, actions pinned to major versions, minimal workflow permissions.
-- **Leaked secrets**: tokens committed by mistake. Mitigation: `gitleaks` runs in the local gates
-  and in CI; `.env` files are git-ignored.
-- **Untrusted input**: callers may pass hostile strings. Mitigation: validate input and fail with
-  explicit exceptions; never `eval`, `exec` or deserialize untrusted data.
+- Defended: Malformed strategy configuration is caught eagerly. Parameters passed to strategy factories are validated at call time, preventing invalid states.
+- Not Defended: This library does not validate the security of the actual data generated (e.g., it produces strings that are syntactically valid but potentially malicious content for injection attacks). The user is responsible for sanitizing outputs in their specific context.
 
-## Publishing
+## Limits
 
-Releases are published to PyPI with trusted publishing (OIDC) when available, never with a
-long-lived token stored in the repository.
-
-To report a vulnerability, see [SECURITY.md](../SECURITY.md).
+Validation of strategy arguments (e.g., `max_length < 6` for emails) happens before any example generation occurs. Calling a strategy with invalid parameters raises `PropertyStrategiesError` immediately.
