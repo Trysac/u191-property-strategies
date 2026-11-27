@@ -4,8 +4,10 @@ Property-based tests frequently require complex inputs like URLs, emails, or ver
 
 ## Installation
 
+Not published to PyPI yet. Install it from GitHub:
+
 ```bash
-pip install property-strategies
+pip install "git+https://github.com/Trysac/u191-property-strategies"
 ```
 
 ## Usage Example
